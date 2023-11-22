@@ -1,0 +1,38 @@
+#include<Servo.h>   // 서보모터 헤더파일 추가
+
+Servo myservo;      // 서보모터 구조체 선언
+
+int pin_trig = 13;  // 초음파 센서 송신부
+int pin_echo = 12;  // 초음파 센서 수신부
+float duration = 0, distance = 0; // 초음파 센서를 이용한 주기 및 거리 측정
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(pin_trig, OUTPUT);
+  pinMode(pin_echo, INPUT);
+}
+
+void loop() {
+  digitalWrite(pin_trig, HIGH); // 초음파 발생하여 주기 측정
+  delay(10);
+  digitalWrite(pin_trig, LOW);
+
+  duration = pulseIn(pin_echo, HIGH);               // pulseIn() 함수를 이용한 초음파 센서 주기(ms) 반환
+  distance = ((float)(340 * duration)) / 10000 / 2; // cm 단위 거리 변환
+
+  Serial.println(duration ); //초음파가 반사되어 돌아오는 시간을 보여줍니다.
+  Serial.print("\n거리: ");
+  Serial.print(distance); //측정된 물체로부터 거리값(cm값)을 보여줍니다.
+  Serial.println(" Cm");
+  delay(1000); //1초마다 측정값을 보여줍니다.
+
+  if (distance < 20) {  // 거리가 15cm 미만일 때
+    myservo.attach(9);
+    myservo.write(90);  // 서보모터 제어
+    Serial.println("OPEN");
+    delay(1500);
+  }
+  else {
+    myservo.write(0);  // 서보모터 제어
+  }
+}
