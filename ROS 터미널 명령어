@@ -1,0 +1,7 @@
+rosrun rosserial_python serial_node.py _port:=/dev/ttyACM0
+<아두이노의 포트 연결 노드를 확인한다>
+
+
+
+rostopic pub /servo std_msgs/UInt16 각도 --once
+<입력돤 값의 각도만큼 서보모터 값을 조절한다>
